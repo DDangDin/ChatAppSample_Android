@@ -1,4 +1,4 @@
-# ChatApp (1,2번 중 1번에 해당하는 프로젝트)
+# ChatAppSample (1,2번 중 1번에 해당하는 프로젝트)
 ---
 ## 1. Android ChatApp
 - Android Native
