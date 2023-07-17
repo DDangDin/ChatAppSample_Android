@@ -1,4 +1,5 @@
-# ChatAppSample (1,2번 중 1번에 해당하는 프로젝트)
+# ChatAppSample
+## (해당 Repo는 1(Android), 2(KMM)중 1번에 해당)
 ---
 ## 1. Android ChatApp
 - Android Native
