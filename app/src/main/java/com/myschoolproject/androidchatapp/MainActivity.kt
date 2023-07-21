@@ -9,7 +9,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
+import com.myschoolproject.androidchatapp.navigation.NavigationGraph
 import com.myschoolproject.androidchatapp.presentation.components.login.LoginScreen
 import com.myschoolproject.androidchatapp.ui.theme.AndroidChatAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,25 +29,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen(Modifier.fillMaxSize())
+
+                    val navController = rememberNavController()
+
+                    NavigationGraph(navController = navController)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AndroidChatAppTheme {
-        Greeting("Android")
     }
 }

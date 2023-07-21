@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">AndroidChatApp</string>
 
+    <string name="service_name">Simple Chat</string>
+
 <!--  이름 형식: 뷰_요소_(상세 요소)  -->
     <string name="login_btn_text">시작하기</string>
+    <string name="login_tf_hint">닉네임 설정</string>
 </resources>

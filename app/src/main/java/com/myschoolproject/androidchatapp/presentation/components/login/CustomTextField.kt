@@ -16,19 +16,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.myschoolproject.androidchatapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
     text: String,
-    onTextChanged: (String) -> Unit
+    onTextChanged: (String) -> Unit,
+    borderColor: Color
 ) {
     OutlinedTextField(
         modifier = modifier
@@ -36,7 +39,7 @@ fun CustomTextField(
             .height(50.dp)
             .background(Color.Transparent)
             .clip(RoundedCornerShape(50.dp))
-            .border(border = BorderStroke(1.34.dp, Color.White), shape = RoundedCornerShape(50.dp)),
+            .border(border = BorderStroke(1.34.dp, borderColor), shape = RoundedCornerShape(50.dp)),
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -47,7 +50,7 @@ fun CustomTextField(
         placeholder = {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "닉네임 설정",
+                text = stringResource(id = R.string.login_tf_hint),
                 color = Color.White.copy(alpha = .5f),
                 textAlign = TextAlign.Center,
                 fontSize = 15.sp
@@ -71,6 +74,7 @@ fun CustomTextField(
 fun CustomTextFieldPreview() {
     CustomTextField(
         text = "홍길동",
-        onTextChanged = { }
+        onTextChanged = { },
+        borderColor = Color.White
     )
 }

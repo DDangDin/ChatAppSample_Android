@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
-//    id 'com.google.gms.google-services'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -106,15 +106,15 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:1.4.3"
 
     // Firebase
-//    implementation platform('com.google.firebase:firebase-bom:32.1.1')
-////    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
 //    // Firebase - Auth
 //    implementation 'com.google.android.gms:play-services-auth:20.5.0'
 //    implementation 'com.google.firebase:firebase-auth'
 //    // Firebase - Firestore
 //    implementation 'com.google.firebase:firebase-firestore-ktx'
-//    // Firebase - Storage
-//    implementation 'com.google.firebase:firebase-storage-ktx'
-//    // Firebase - Realtime Databse
-//    implementation 'com.google.firebase:firebase-database-ktx'
+    // Firebase - Storage
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    // Firebase - Realtime Databse
+    implementation 'com.google.firebase:firebase-database-ktx'
 }
