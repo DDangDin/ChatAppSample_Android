@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,6 +52,34 @@ fun CustomButton(
     }
 }
 
+@Composable
+fun CustomButton2(
+    modifier: Modifier = Modifier,
+    @StringRes text: Int,
+    onClick: () -> Unit
+) {
+    OutlinedButton(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(50.dp),
+        shape = RoundedCornerShape(50.dp),
+        border = BorderStroke(width = 1.34.dp, Color.White),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent
+        ),
+        onClick = { onClick() },
+    ) {
+        Text(
+            text = stringResource(id = text).uppercase(),
+//            fontFamily = PretendardFont,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center,
+            color = Color.White
+        )
+    }
+}
+
 @Preview
 @Composable
 fun CustomButtonPreview() {
@@ -57,4 +87,14 @@ fun CustomButtonPreview() {
         text = R.string.login_btn_text,
         onClick = {}
     )
+}
+
+@Preview
+@Composable
+fun CustomButtonPreview2() {
+    CustomButton2(
+        text = R.string.login_btn_text,
+        onClick = {}
+    )
+
 }

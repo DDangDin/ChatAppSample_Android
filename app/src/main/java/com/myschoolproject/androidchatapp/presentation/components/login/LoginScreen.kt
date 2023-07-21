@@ -87,7 +87,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 text = viewModel.nickname.value,
                 onTextChanged = viewModel::onNicknameChanged
             ) // 키보드 올라 왔을 때 약간의 여백 주기
-            CustomButton(
+            CustomButton2(
                 text = R.string.login_btn_text,
                 onClick = {  }
             )
@@ -106,7 +106,7 @@ fun changeStatusBarColor(
     WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     LoginScreen()
