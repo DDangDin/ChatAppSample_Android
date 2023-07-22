@@ -30,7 +30,7 @@ class ChatRepositoryImpl(
             // 중복 검사
             chatRef.child(FIREBASE_DATABASE_USER_TABLE).addListenerForSingleValueEvent(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // 여기서 오류남 snapshot 다루는 법 보기
+                    // 여기서 오류남 snapshot 다루는 법 보기.
 //                    val value = snapshot.getValue(UserStatus::class.java)
 //                    if (value != null) {
 //                        errorMessage = FIREBASE_DATABASE_INITIALIZE_EXISTS_ERROR
