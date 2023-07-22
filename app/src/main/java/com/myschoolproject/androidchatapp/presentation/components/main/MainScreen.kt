@@ -49,7 +49,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.core.view.WindowCompat
 import com.myschoolproject.androidchatapp.R
+import com.myschoolproject.androidchatapp.core.common.Constants
 import com.myschoolproject.androidchatapp.core.common.Utils.changeStatusBarColor
+import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
 import com.myschoolproject.androidchatapp.core.utils.CustomThemeEffect.clickableWithoutRipple
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
 import com.myschoolproject.androidchatapp.presentation.components.login.CustomButton2
@@ -79,7 +81,8 @@ fun MainScreen(
     var isUserClick by remember { mutableStateOf(false) }
     var selectedUserData by remember { mutableStateOf(UserStatus()) }
 
-    val userList = userListState.userList
+    val myName = CustomSharedPreference(context).getUserPrefs(Constants.PREFERENCE_USERNAME)
+    val userList = userListState.userList.filter { it.nickname != myName }
 
     LaunchedEffect(key1 = !isStatusBarColorChanged) {
         changeStatusBarColor(context, view, Color.White)
