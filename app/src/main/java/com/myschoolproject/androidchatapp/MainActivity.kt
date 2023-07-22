@@ -33,6 +33,8 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     NavigationGraph(navController = navController)
+
+//                    CustomSharedPreference(LocalContext.current).deleteAllUserPrefs()
                 }
             }
         }

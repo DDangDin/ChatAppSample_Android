@@ -69,6 +69,9 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
+    // For pullRefresh
+    implementation 'androidx.compose.material:material:1.4.3'
+
     // accompanist
     implementation "com.google.accompanist:accompanist-navigation-animation:0.31.2-alpha"
 

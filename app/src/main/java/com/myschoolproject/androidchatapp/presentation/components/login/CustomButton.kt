@@ -29,15 +29,17 @@ import com.myschoolproject.androidchatapp.R
 fun CustomButton(
     modifier: Modifier = Modifier,
     @StringRes text: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    backgroundColor: Color,
+    borderEnabled: Boolean
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
-            .background(Color.Transparent)
+            .background(backgroundColor)
             .clip(RoundedCornerShape(50.dp))
-            .border(border = BorderStroke(1.34.dp, Color.White), shape = RoundedCornerShape(50.dp))
+            .border(border = BorderStroke(if (borderEnabled) 1.34.dp else 0.dp, Color.White), shape = RoundedCornerShape(50.dp))
             .clickable { onClick() }
     ) {
         Text(
@@ -56,16 +58,19 @@ fun CustomButton(
 fun CustomButton2(
     modifier: Modifier = Modifier,
     @StringRes text: Int,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    backgroundColor: Color,
+    borderColor: Color = Color.White,
+    borderEnabled: Boolean,
 ) {
     OutlinedButton(
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp),
         shape = RoundedCornerShape(50.dp),
-        border = BorderStroke(width = 1.34.dp, Color.White),
+        border = BorderStroke(width = if (borderEnabled) 1.34.dp else 0.dp, borderColor),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent
+            containerColor = backgroundColor
         ),
         onClick = { onClick() },
     ) {
@@ -85,7 +90,9 @@ fun CustomButton2(
 fun CustomButtonPreview() {
     CustomButton(
         text = R.string.login_btn_text,
-        onClick = {}
+        onClick = {},
+        backgroundColor = Color.Transparent,
+        borderEnabled = true
     )
 }
 
@@ -94,7 +101,9 @@ fun CustomButtonPreview() {
 fun CustomButtonPreview2() {
     CustomButton2(
         text = R.string.login_btn_text,
-        onClick = {}
+        onClick = {},
+        backgroundColor = Color.Transparent,
+        borderEnabled = true
     )
 
 }

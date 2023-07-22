@@ -1,8 +1,6 @@
 package com.myschoolproject.androidchatapp.presentation.components.login
 
-import android.app.Activity
-import android.content.Context
-import android.view.View
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -33,13 +30,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.myschoolproject.androidchatapp.R
 import com.myschoolproject.androidchatapp.core.common.Constants.PREFERENCE_USERNAME
+import com.myschoolproject.androidchatapp.core.common.Utils.changeStatusBarColor
 import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
+import com.myschoolproject.androidchatapp.presentation.state.CheckUserState
 import com.myschoolproject.androidchatapp.presentation.state.LoginState
-import com.myschoolproject.androidchatapp.presentation.viewmodel.LoginViewModel
 import com.myschoolproject.androidchatapp.ui.theme.MyPrimaryColor
 
 // onCheckUser나 특정 작업들은 Sealed Class(UiEvent)만들어서 활용하기!!!
@@ -48,10 +44,11 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     nickname: String,
     onNicknameChanged: (String) -> Unit,
-    checkUser: Boolean,
-    onCheckUser: (Boolean) -> Unit,
-    onStart: () -> Unit,
-    loginState: LoginState
+    checkUserState: CheckUserState,
+    onCheckUser: (String) -> Unit,
+    login: () -> Unit,
+    loginState: LoginState,
+    onNavigate: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -71,8 +68,22 @@ fun LoginScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
-        if (!CustomSharedPreference(context).isContain(PREFERENCE_USERNAME)) {
-            onCheckUser(true)
+        if (CustomSharedPreference(context).isContain(PREFERENCE_USERNAME)) {
+            val username = CustomSharedPreference(context).getUserPrefs(PREFERENCE_USERNAME)
+            Log.d("SharedPreference_Log", username)
+            onCheckUser(username)
+        }
+    }
+    LaunchedEffect(key1 = checkUserState) {
+        if (checkUserState.isSuccess) {
+            onNavigate()
+        }
+    }
+
+    LaunchedEffect(key1 = loginState) {
+        if (loginState.isReady) {
+            CustomSharedPreference(context).setUserPrefs(PREFERENCE_USERNAME, nickname.trim())
+            onNavigate()
         }
     }
 
@@ -115,7 +126,7 @@ fun LoginScreen(
                 alignment = Alignment.CenterVertically
             )
         ) {
-            if (loginState.loading || !checkUser) {
+            if (checkUserState.loading) {
                 CircularProgressIndicator(
                     strokeWidth = 1.5.dp,
                     color = Color.White,
@@ -134,24 +145,23 @@ fun LoginScreen(
                     onTextChanged = onNicknameChanged,
                     borderColor = borderColor
                 ) // 키보드 올라 왔을 때 약간의 여백 줘야 함
-                CustomButton2(
-                    text = R.string.login_btn_text,
-                    onClick = { onStart() }
-                )
+                if (loginState.loading) {
+                    CircularProgressIndicator(
+                        strokeWidth = 1.5.dp,
+                        color = Color.White,
+                        modifier = Modifier.size(45.dp)
+                    )
+                } else {
+                    CustomButton2(
+                        text = R.string.login_btn_text,
+                        onClick = { login() },
+                        backgroundColor = Color.Transparent,
+                        borderEnabled = true
+                    )
+                }
             }
         }
     }
-}
-
-fun changeStatusBarColor(
-    context: Context,
-    view: View,
-    color: Color
-) {
-    // change statusBar & Icon color in only OnBoardingScreen
-    val window = (context as Activity).window
-    window.statusBarColor = color.toArgb()
-    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
 }
 
 @Preview(showBackground = true)
@@ -160,9 +170,10 @@ fun LoginScreenPreview() {
     LoginScreen(
         nickname = "",
         onNicknameChanged = {},
-        checkUser = true,
+        checkUserState = CheckUserState(),
         onCheckUser = {},
-        onStart = {},
-        loginState = LoginState()
+        login = {},
+        loginState = LoginState(),
+        onNavigate = {}
     )
 }

@@ -6,4 +6,5 @@
 <!--  이름 형식: 뷰_요소_(상세 요소)  -->
     <string name="login_btn_text">시작하기</string>
     <string name="login_tf_hint">닉네임 설정</string>
+    <string name="main_btn_text">채팅시작</string>
 </resources>
