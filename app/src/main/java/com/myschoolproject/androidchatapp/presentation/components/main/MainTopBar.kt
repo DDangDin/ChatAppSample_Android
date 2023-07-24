@@ -29,7 +29,7 @@ fun MainTopBar(modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 23.dp, horizontal = 90.dp),
+                .padding(vertical = 20.dp, horizontal = 90.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterHorizontally)
         ) {

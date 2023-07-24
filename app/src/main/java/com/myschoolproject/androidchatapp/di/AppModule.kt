@@ -4,7 +4,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.myschoolproject.androidchatapp.data.repository.ChatRepositoryImpl
+import com.myschoolproject.androidchatapp.data.repository.ChattingRepositoryImpl
 import com.myschoolproject.androidchatapp.domain.repository.ChatRepository
+import com.myschoolproject.androidchatapp.domain.repository.ChattingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,5 +25,11 @@ object AppModule {
     @Singleton
     fun provideChatRepository(chatRef: DatabaseReference): ChatRepository {
         return ChatRepositoryImpl(chatRef)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChattingRepository(chatRef: DatabaseReference): ChattingRepository {
+        return ChattingRepositoryImpl(chatRef)
     }
 }

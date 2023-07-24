@@ -118,14 +118,4 @@ class ChatRepositoryImpl(
         }
     }
 
-    override suspend fun sendMessage(myName: String, friendName: String, chatData: Chat) {
-
-    }
-
-    override suspend fun getChatMessages(
-        myName: String,
-        friendName: String
-    ): Flow<Resource<List<Chat>>> = callbackFlow {
-            trySend(Resource.Success(listOf(Chat("",""))))
-        }
 }

@@ -13,8 +13,4 @@ interface ChatRepository {
 
     suspend fun getUserList(): Flow<Resource<List<UserStatus>>>
 
-    suspend fun sendMessage(myName: String, friendName: String, chatData: Chat)
-//    suspend fun getChat(myName: String, friendName: String): Flow<Resource<Chat>>
-    suspend fun getChatMessages(myName: String, friendName: String): Flow<Resource<List<Chat>>>
-
 }

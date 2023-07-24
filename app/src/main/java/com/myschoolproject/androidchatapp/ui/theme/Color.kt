@@ -12,6 +12,9 @@ val Pink40 = Color(0xFF7D5260)
 
 
 // Custom Material Color
+val blackColor = Color(0xFF3A3737)
+val TextHint = Color(0xFF9A9A9A)
+val SpacerCustomColor = Color(0xFFE0E0E0)
 
 // Light Scheme
 val MyPrimaryColor = Color(0xFF3F70EE)

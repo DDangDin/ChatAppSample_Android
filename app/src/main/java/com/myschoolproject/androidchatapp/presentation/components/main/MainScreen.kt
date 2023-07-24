@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -63,7 +64,8 @@ import com.myschoolproject.androidchatapp.ui.theme.MyPrimaryColor
 fun MainScreen(
     modifier: Modifier = Modifier,
     userListState: UserListState,
-    onEvent: (MainUiEvent) -> Unit
+    onEvent: (MainUiEvent) -> Unit,
+    onNavigate: (String) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -82,7 +84,10 @@ fun MainScreen(
     var selectedUserData by remember { mutableStateOf(UserStatus()) }
 
     val myName = CustomSharedPreference(context).getUserPrefs(Constants.PREFERENCE_USERNAME)
-    val userList = userListState.userList.filter { it.nickname != myName }
+    val excludeList = listOf(myName, "Admin") // exclude users(Me, Admin)
+    val userList = userListState.userList.filterNot {
+        it.nickname in excludeList
+    }
 
     LaunchedEffect(key1 = !isStatusBarColorChanged) {
         changeStatusBarColor(context, view, Color.White)
@@ -94,7 +99,10 @@ fun MainScreen(
             isRefreshing = false
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -110,7 +118,8 @@ fun MainScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
+                    .fillMaxHeight()
+                    .padding(start = 20.dp, end = 20.dp, bottom = 110.dp)
                     .pullRefresh(pullRefreshState),
             ) {
                 if (!userListState.loading && userListState.userList.isNotEmpty()) {
@@ -169,7 +178,7 @@ fun MainScreen(
                     .fillMaxWidth()
                     .padding(29.dp),
                 text = R.string.main_btn_text,
-                onClick = { /*TODO*/ },
+                onClick = { onNavigate(selectedUserData.nickname) },
                 backgroundColor = MyPrimaryColor,
                 borderEnabled = false
             )
@@ -182,6 +191,7 @@ fun MainScreen(
 fun MainScreenPreview() {
     MainScreen(
         userListState = UserListState(),
-        onEvent = {}
+        onEvent = {},
+        onNavigate = {}
     )
 }

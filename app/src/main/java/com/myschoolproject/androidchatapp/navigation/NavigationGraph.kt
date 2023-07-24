@@ -5,11 +5,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
+import com.myschoolproject.androidchatapp.presentation.components.chat.ChatScreen
 import com.myschoolproject.androidchatapp.presentation.components.login.LoginScreen
 import com.myschoolproject.androidchatapp.presentation.components.main.MainScreen
+import com.myschoolproject.androidchatapp.presentation.viewmodel.ChatViewModel
 import com.myschoolproject.androidchatapp.presentation.viewmodel.LoginViewModel
 import com.myschoolproject.androidchatapp.presentation.viewmodel.MainViewModel
 
@@ -17,6 +21,8 @@ import com.myschoolproject.androidchatapp.presentation.viewmodel.MainViewModel
 fun NavigationGraph(navController: NavHostController) {
 
     val context = LocalContext.current
+
+    val routeChatScreen = Routes.CHATTING_SCREEN
 
     NavHost(
         navController = navController,
@@ -45,16 +51,39 @@ fun NavigationGraph(navController: NavHostController) {
         }
 
         composable(route = Routes.MAIN_SCREEN) {
+
             val mainViewModel: MainViewModel = hiltViewModel()
             val userListState = mainViewModel.userListState.collectAsState()
+
             MainScreen(
                 userListState = userListState.value,
-                onEvent = mainViewModel::onEvent
+                onEvent = mainViewModel::onEvent,
+                onNavigate = { friendName ->
+                    navController.navigate("$routeChatScreen/$friendName") {
+                        popUpTo(Routes.LOGIN_SCREEN) { inclusive = true }
+                    }
+                }
             )
         }
 
-        composable(route = Routes.CHATTING_SCREEN) {
+        composable(
+            route = "$routeChatScreen/{friendName}",
+            arguments = listOf(
+                navArgument("friendName") {
+                    type = NavType.StringType
+                    defaultValue = "default"
+                }
+            )
+        ) { backStackEntry ->
 
+            val chatViewModel: ChatViewModel = hiltViewModel()
+            val friendName = backStackEntry.arguments?.getString("friendName") ?: "errorDefault"
+
+            ChatScreen(
+                chatState = chatViewModel.chatState.value,
+                friendName = friendName,
+                onEvent = {}
+            )
         }
     }
 }
