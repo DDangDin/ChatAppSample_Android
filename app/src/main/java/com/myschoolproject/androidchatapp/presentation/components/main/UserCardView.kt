@@ -35,6 +35,7 @@ fun UserCardView(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
+            modifier = Modifier.padding(horizontal = 3.dp),
             text = nickname,
             fontSize = 25.sp,
             color = MyOnBackgroundColor

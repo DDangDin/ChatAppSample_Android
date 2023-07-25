@@ -1,6 +1,7 @@
 package com.myschoolproject.androidchatapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -9,8 +10,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.myschoolproject.androidchatapp.core.common.Constants
+import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
 import com.myschoolproject.androidchatapp.presentation.components.chat.ChatScreen
+import com.myschoolproject.androidchatapp.presentation.components.chat.ChatUiEvent
 import com.myschoolproject.androidchatapp.presentation.components.login.LoginScreen
 import com.myschoolproject.androidchatapp.presentation.components.main.MainScreen
 import com.myschoolproject.androidchatapp.presentation.viewmodel.ChatViewModel
@@ -78,11 +82,19 @@ fun NavigationGraph(navController: NavHostController) {
 
             val chatViewModel: ChatViewModel = hiltViewModel()
             val friendName = backStackEntry.arguments?.getString("friendName") ?: "errorDefault"
+            val myName = CustomSharedPreference(LocalContext.current).getUserPrefs(Constants.PREFERENCE_USERNAME)
+
+            LaunchedEffect(key1 = Unit) {
+                chatViewModel.initializeChat(myName, friendName)
+            }
 
             ChatScreen(
                 chatState = chatViewModel.chatState.value,
                 friendName = friendName,
-                onEvent = {}
+                onEvent = chatViewModel::onEvent,
+                onPopBackStack = { navController.popBackStack() },
+                inputMessage = chatViewModel.inputMessage,
+                inputMessageChanged = chatViewModel::inputMessageChanged
             )
         }
     }

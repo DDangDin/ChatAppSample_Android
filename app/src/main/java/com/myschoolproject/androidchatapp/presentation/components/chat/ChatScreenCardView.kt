@@ -50,7 +50,6 @@ fun ChatScreenCardView(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(0.6f)
                     .clip(RoundedCornerShape(23.dp))
                     .background(backgroundColor)
             ) {
@@ -87,6 +86,6 @@ fun FriendChatCardViewPreview() {
 fun MyChatCardViewPreview() {
     ChatScreenCardView(
         isMyChat = true,
-        chat = Chat("홍길동", "혼자 마시지 좀 그랬는데 좋지!")
+        chat = Chat("홍길동", "안녕!안녕!안녕!")
     )
 }

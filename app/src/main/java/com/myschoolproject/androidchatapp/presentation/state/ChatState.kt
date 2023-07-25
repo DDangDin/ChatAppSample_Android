@@ -5,5 +5,5 @@ import com.myschoolproject.androidchatapp.data.source.remote.firebase.Chat
 data class ChatState(
     val chatList: List<Chat> = emptyList(),
     val loading: Boolean = false,
-    val error: String = ""
+    val error: String = "",
 )

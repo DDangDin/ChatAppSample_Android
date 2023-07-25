@@ -5,7 +5,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.myschoolproject.androidchatapp.core.common.Constants.ERROR_MESSAGE_INTERNET_CONNECTION
+import com.myschoolproject.androidchatapp.core.common.Constants.ERROR_MESSAGE_UNEXPECTED
 import com.myschoolproject.androidchatapp.core.common.Constants.FIREBASE_DATABASE_CHAT_TABLE
+import com.myschoolproject.androidchatapp.core.common.Constants.FIREBASE_DATABASE_INITIALIZE_MESSAGE
 import com.myschoolproject.androidchatapp.core.common.Constants.FIREBASE_DATABASE_USER_TABLE
 import com.myschoolproject.androidchatapp.core.utils.Resource
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.Chat
@@ -14,6 +17,8 @@ import com.myschoolproject.androidchatapp.domain.repository.ChattingRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -69,6 +74,36 @@ class ChattingRepositoryImpl(
         awaitClose { close() }
     }
 
+    override suspend fun initializeChat(
+        myName: String,
+        friendName: String
+    ): Flow<Resource<Boolean>> = flow {
+        emit(Resource.Loading())
+
+        try {
+
+            val chat = Chat(
+                username = "Admin",
+                message = ""
+            )
+
+            chatRef
+                .child(FIREBASE_DATABASE_CHAT_TABLE)
+                .child("${myName}-${friendName}")
+                .child(FIREBASE_DATABASE_INITIALIZE_MESSAGE)
+                .setValue(chat)
+            chatRef
+                .child(FIREBASE_DATABASE_CHAT_TABLE)
+                .child("${friendName}-${myName}")
+                .child(FIREBASE_DATABASE_INITIALIZE_MESSAGE)
+                .setValue(chat)
+
+            emit(Resource.Success(true))
+        } catch (e: IOException) {
+            emit(Resource.Error(ERROR_MESSAGE_INTERNET_CONNECTION))
+        }
+    }
+
     override suspend fun startChatting(myName: String) {
         chatRef
             .child(FIREBASE_DATABASE_USER_TABLE)
@@ -81,7 +116,7 @@ class ChattingRepositoryImpl(
             )
     }
 
-    override suspend fun quitChatting(myName: String) {
+    override suspend fun quitChatting(myName: String, friendName: String) {
         chatRef
             .child(FIREBASE_DATABASE_USER_TABLE)
             .child(myName)
@@ -91,5 +126,15 @@ class ChattingRepositoryImpl(
                     isChatting = false
                 )
             )
+        chatRef
+            .child(FIREBASE_DATABASE_CHAT_TABLE)
+            .child("${myName}-${friendName}")
+            .child(FIREBASE_DATABASE_INITIALIZE_MESSAGE)
+            .removeValue()
+        chatRef
+            .child(FIREBASE_DATABASE_CHAT_TABLE)
+            .child("${friendName}-${myName}")
+            .child(FIREBASE_DATABASE_INITIALIZE_MESSAGE)
+            .removeValue()
     }
 }

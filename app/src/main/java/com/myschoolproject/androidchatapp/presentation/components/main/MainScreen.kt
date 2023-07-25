@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -45,9 +46,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.myschoolproject.androidchatapp.R
 import com.myschoolproject.androidchatapp.core.common.Constants
@@ -58,6 +61,7 @@ import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
 import com.myschoolproject.androidchatapp.presentation.components.login.CustomButton2
 import com.myschoolproject.androidchatapp.presentation.state.UserListState
 import com.myschoolproject.androidchatapp.ui.theme.MyPrimaryColor
+import com.myschoolproject.androidchatapp.ui.theme.SpacerCustomColor
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -115,6 +119,19 @@ fun MainScreen(
                 thickness = 1.5.dp,
                 color = Color(0xFFDDDDDD)
             )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp, horizontal = 10.dp),
+                text = "내 닉네임: $myName",
+                textAlign = TextAlign.End,
+                fontSize = 12.sp
+            )
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 1.5.dp,
+                color = Color(0xFFDDDDDD)
+            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -133,13 +150,18 @@ fun MainScreen(
                             UserCardView(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickableWithoutRipple(
-                                        onClick = {
+                                    .clickable {
+                                        if (selectedUserData.hashCode() == user.hashCode() ||
+                                            selectedUserData.nickname.isEmpty()
+                                        ) {
                                             isUserClick = !isUserClick
+                                        }
+                                        if (isUserClick) {
                                             selectedUserData = user
-                                        },
-                                        interactionSource = MutableInteractionSource()
-                                    ),
+                                        } else {
+                                            selectedUserData = UserStatus()
+                                        }
+                                    },
                                 nickname = user.nickname,
                                 isChatting = user.isChatting
                             )

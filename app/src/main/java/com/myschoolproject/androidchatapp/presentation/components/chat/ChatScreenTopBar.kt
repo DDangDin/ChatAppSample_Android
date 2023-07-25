@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +24,7 @@ import com.myschoolproject.androidchatapp.ui.theme.blackColor
 fun ChatScreenTopBar(
     modifier: Modifier = Modifier,
     friendName: String,
-    onEvent: (ChatUiEvent) -> Unit
+    onExit: () -> Unit
 ) {
 
     Box(modifier = modifier.fillMaxWidth()) {
@@ -40,12 +41,17 @@ fun ChatScreenTopBar(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold
             )
-            Icon(
+            IconButton(
                 modifier = Modifier.size(33.dp),
-                imageVector = Icons.Outlined.ExitToApp,
-                contentDescription = "exit",
-                tint = blackColor
-            )
+                onClick = { onExit() }
+            ) {
+                Icon(
+                    modifier = Modifier.size(33.dp),
+                    imageVector = Icons.Outlined.ExitToApp,
+                    contentDescription = "exit",
+                    tint = blackColor
+                )
+            }
         }
     }
 }
@@ -55,6 +61,6 @@ fun ChatScreenTopBar(
 fun ChatTopBarPreview() {
     ChatScreenTopBar(
         friendName = "홍길동",
-        onEvent = {}
+        onExit = {}
     )
 }

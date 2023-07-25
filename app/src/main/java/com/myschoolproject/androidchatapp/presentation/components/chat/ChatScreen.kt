@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +33,7 @@ import com.myschoolproject.androidchatapp.core.common.Constants
 import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.Chat
 import com.myschoolproject.androidchatapp.presentation.state.ChatState
+import com.myschoolproject.androidchatapp.ui.theme.MyPrimaryColor
 import com.myschoolproject.androidchatapp.ui.theme.SpacerCustomColor
 import kotlinx.coroutines.launch
 
@@ -39,7 +42,10 @@ fun ChatScreen(
     modifier: Modifier = Modifier,
     chatState: ChatState,
     friendName: String,
-    onEvent: (ChatUiEvent) -> Unit
+    onEvent: (ChatUiEvent) -> Unit,
+    onPopBackStack: () -> Unit,
+    inputMessage: String,
+    inputMessageChanged: (String) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -53,6 +59,11 @@ fun ChatScreen(
         }
     )
     val coroutineScope = rememberCoroutineScope()
+
+    val chatList = chatState.chatList.filter {
+        it.message.isNotEmpty() ||
+        it.username != "Admin"
+    }
 
     LaunchedEffect(key1 = chatState.chatList) {
         Log.d("ChattingLog_Scroll", "ChattingLog_Scroll")
@@ -72,7 +83,13 @@ fun ChatScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                ChatScreenTopBar(friendName = friendName, onEvent = {})
+                ChatScreenTopBar(
+                    friendName = friendName,
+                    onExit = {
+                        onEvent(ChatUiEvent.QuitChat(myName, friendName))
+                        onPopBackStack()
+                    }
+                )
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -85,7 +102,7 @@ fun ChatScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(top = 80.dp, start = 10.dp, end = 10.dp),
+                    .padding(top = 80.dp, start = 7.dp, end = 7.dp),
             ) {
                 if (chatState.chatList.isNotEmpty() && !chatState.loading) {
                     LazyColumn(
@@ -96,7 +113,7 @@ fun ChatScreen(
                         ),
                         state = scrollState
                     ) {
-                        items(chatState.chatList) { chat ->
+                        items(chatList) { chat ->
                             val isMyChat = myName == chat.username
                             ChatScreenCardView(
                                 modifier = Modifier.fillMaxWidth(),
@@ -106,16 +123,12 @@ fun ChatScreen(
                         }
                     }
                 } else {
-                    Text(
-                        text = if (!chatState.loading) {
-                            "상대방이 나가거나\n아직 대화를 시작 하지 않은 방 입니다"
-                        } else {
-                            ""
-                        },
-                        fontWeight = FontWeight.Light,
-                        fontSize = 17.sp,
-                        color = Color.Red.copy(alpha = 0.7f),
-                        textAlign = TextAlign.Center
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(100.dp),
+                        strokeWidth = 3.dp,
+                        color = MyPrimaryColor
                     )
                 }
             }
@@ -125,10 +138,10 @@ fun ChatScreen(
             modifier = modifier
                 .weight(0.8f)
                 .fillMaxWidth(),
-            inputMessage = "",
-            inputMessageChanged = { },
+            inputMessage = inputMessage,
+            inputMessageChanged = inputMessageChanged,
             onSend = {
-//                onSend() // onEvent
+                onEvent(ChatUiEvent.SendChat(myName, friendName, inputMessage)) // onEvent
                 coroutineScope.launch {
                     if (chatState.chatList.size - 1 >= 0) {
                         scrollState.animateScrollToItem(chatState.chatList.size - 1)
@@ -175,5 +188,12 @@ fun ChatScreenPreview() {
         )
     )
 
-    ChatScreen(chatState = chatState, friendName = "홍길동2", onEvent = {})
+    ChatScreen(
+        chatState = chatState,
+        friendName = "홍길동2",
+        onEvent = {},
+        onPopBackStack = {},
+        inputMessageChanged = {},
+        inputMessage = ""
+    )
 }
