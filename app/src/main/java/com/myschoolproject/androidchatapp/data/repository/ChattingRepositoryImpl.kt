@@ -12,6 +12,7 @@ import com.myschoolproject.androidchatapp.core.common.Constants.FIREBASE_DATABAS
 import com.myschoolproject.androidchatapp.core.common.Constants.FIREBASE_DATABASE_USER_TABLE
 import com.myschoolproject.androidchatapp.core.utils.Resource
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.Chat
+import com.myschoolproject.androidchatapp.data.source.remote.firebase.MyChatListPreview
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
 import com.myschoolproject.androidchatapp.domain.repository.ChattingRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -24,7 +25,7 @@ import java.util.Locale
 
 class ChattingRepositoryImpl(
     private val chatRef: DatabaseReference
-): ChattingRepository {
+) : ChattingRepository {
 
     override suspend fun sendMessage(myName: String, friendName: String, message: String) {
 
@@ -73,6 +74,43 @@ class ChattingRepositoryImpl(
 
         awaitClose { close() }
     }
+
+    override suspend fun getMyChatList(myName: String): Flow<Resource<List<MyChatListPreview>>> =
+        callbackFlow {
+            chatRef.child(FIREBASE_DATABASE_CHAT_TABLE)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val friendsList = arrayListOf<MyChatListPreview>()
+                        snapshot.children.forEach { s ->
+                            val key = s.key
+                            val lastChild = s.children.last().getValue(Chat::class.java)
+                            if (key != null && lastChild != null) {
+                                val keyList = key.split("-")
+                                if (myName in keyList) {
+                                    keyList.forEach { k ->
+                                        if (myName != k && lastChild.message.isNotEmpty()) {
+                                            friendsList.add(
+                                                MyChatListPreview(
+                                                    friendName = k,
+                                                    lastMessage = lastChild
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        val friendsList2 = friendsList.distinctBy { it.friendName }
+                        trySend(Resource.Success(friendsList2)).isSuccess
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        trySend(Resource.Error(error.message))
+                    }
+                })
+
+            awaitClose { close() }
+        }
 
     override suspend fun initializeChat(
         myName: String,

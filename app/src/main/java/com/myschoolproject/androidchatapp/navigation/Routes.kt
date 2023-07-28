@@ -5,4 +5,5 @@ object Routes {
     const val LOGIN_SCREEN = "login_screen"
     const val MAIN_SCREEN = "main_screen"
     const val CHATTING_SCREEN = "chatting_screen"
+    const val MESSAGES_SCREEN = "messages_screen"
 }

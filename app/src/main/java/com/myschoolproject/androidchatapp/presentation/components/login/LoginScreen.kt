@@ -133,18 +133,6 @@ fun LoginScreen(
                     modifier = Modifier.size(45.dp)
                 )
             } else {
-                if (loginState.error.isNotEmpty()) {
-                    Text(
-                        text = loginState.error,
-                        color = borderColor,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                CustomTextField(
-                    text = nickname,
-                    onTextChanged = onNicknameChanged,
-                    borderColor = borderColor
-                ) // 키보드 올라 왔을 때 약간의 여백 줘야 함
                 if (loginState.loading) {
                     CircularProgressIndicator(
                         strokeWidth = 1.5.dp,
@@ -152,6 +140,18 @@ fun LoginScreen(
                         modifier = Modifier.size(45.dp)
                     )
                 } else {
+                    if (loginState.error.isNotEmpty()) {
+                        Text(
+                            text = loginState.error,
+                            color = borderColor,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    CustomTextField(
+                        text = nickname,
+                        onTextChanged = onNicknameChanged,
+                        borderColor = borderColor
+                    ) // 키보드 올라 왔을 때 약간의 여백 줘야 함
                     CustomButton2(
                         text = R.string.login_btn_text,
                         onClick = { login() },

@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.myschoolproject.androidchatapp.core.common.Constants.ERROR_MESSAGE_UNEXPECTED
 import com.myschoolproject.androidchatapp.core.utils.Resource
 import com.myschoolproject.androidchatapp.domain.repository.ChatRepository
+import com.myschoolproject.androidchatapp.domain.repository.ChattingRepository
 import com.myschoolproject.androidchatapp.presentation.components.main.MainUiEvent
+import com.myschoolproject.androidchatapp.presentation.state.MyChatListState
 import com.myschoolproject.androidchatapp.presentation.state.UserListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -21,11 +23,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val chattingRepository: ChattingRepository
 ): ViewModel() {
 
     private val _userListState = MutableStateFlow(UserListState())
     val userListState: StateFlow<UserListState> = _userListState.asStateFlow()
+
+    private val _myChatListState = MutableStateFlow(MyChatListState())
+    val myChatListState: StateFlow<MyChatListState> = _myChatListState.asStateFlow()
 
     init {
         getUserList()
@@ -88,6 +94,34 @@ class MainViewModel @Inject constructor(
                             loading = false,
                             error = result.message ?: ERROR_MESSAGE_UNEXPECTED
                         ) }
+                    }
+                }
+            }.launchIn(viewModelScope)
+        }
+    }
+
+    fun getMyChatList(myName: String) {
+        viewModelScope.launch {
+            chattingRepository.getMyChatList(myName).onEach { result ->
+                when(result) {
+                    is Resource.Success -> {
+                        _myChatListState.value = myChatListState.value.copy(
+                            myChatList = result.data ?: emptyList(),
+                            loading = false
+                        )
+                    }
+
+                    is Resource.Error -> {
+                        _myChatListState.value = myChatListState.value.copy(
+                            loading = true
+                        )
+                    }
+
+                    is Resource.Loading -> {
+                        _myChatListState.value = myChatListState.value.copy(
+                            loading = false,
+                            error = result.message ?: ERROR_MESSAGE_UNEXPECTED
+                        )
                     }
                 }
             }.launchIn(viewModelScope)

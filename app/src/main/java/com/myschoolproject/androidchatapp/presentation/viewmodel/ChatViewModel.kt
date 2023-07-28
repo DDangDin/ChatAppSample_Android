@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val chattingRepository: ChattingRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _chatState = mutableStateOf(ChatState())
     val chatState: State<ChatState> = _chatState
@@ -42,13 +42,13 @@ class ChatViewModel @Inject constructor(
                     is Resource.Success -> {
                         getChatMessages(myName, friendName)
                     }
-                    is Resource.Loading -> {  }
-                    is Resource.Error -> {  }
+
+                    is Resource.Loading -> {}
+                    is Resource.Error -> {}
                 }
             }.launchIn(viewModelScope)
         }
     }
-
 
 
     private fun startChat(myName: String, friendName: String) {
@@ -60,18 +60,20 @@ class ChatViewModel @Inject constructor(
     private fun getChatMessages(myName: String, friendName: String) {
         viewModelScope.launch {
             chattingRepository.getChatMessages(myName, friendName).onEach { result ->
-                when(result) {
+                when (result) {
                     is Resource.Success -> {
                         _chatState.value = chatState.value.copy(
                             chatList = result.data ?: emptyList(),
                             loading = false
                         )
                     }
+
                     is Resource.Loading -> {
                         _chatState.value = chatState.value.copy(
                             loading = true
                         )
                     }
+
                     is Resource.Error -> {
                         _chatState.value = chatState.value.copy(
                             loading = false,
@@ -90,16 +92,27 @@ class ChatViewModel @Inject constructor(
     }
 
     private fun sendChat(myName: String, friendName: String, message: String) {
-        viewModelScope.launch {
-            chattingRepository.sendMessage(myName, friendName, message)
+        if (message.isNotEmpty()) {
+            viewModelScope.launch {
+                chattingRepository.sendMessage(myName, friendName, message)
+                inputMessage = ""
+            }
         }
     }
 
     fun onEvent(event: ChatUiEvent) {
-        when(event) {
-            ChatUiEvent.Error -> { Log.d("ChatUiEvent_Log", "Error Occurred!") }
-            is ChatUiEvent.QuitChat -> { quitChat(event.myName, event.friendName) }
-            is ChatUiEvent.SendChat -> { sendChat(event.myName, event.friendName, event.message) }
+        when (event) {
+            ChatUiEvent.Error -> {
+                Log.d("ChatUiEvent_Log", "Error Occurred!")
+            }
+
+            is ChatUiEvent.QuitChat -> {
+                quitChat(event.myName, event.friendName)
+            }
+
+            is ChatUiEvent.SendChat -> {
+                sendChat(event.myName, event.friendName, event.message)
+            }
         }
     }
 }

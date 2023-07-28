@@ -12,9 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.myschoolproject.androidchatapp.core.common.Constants
 import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
-import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
 import com.myschoolproject.androidchatapp.presentation.components.chat.ChatScreen
-import com.myschoolproject.androidchatapp.presentation.components.chat.ChatUiEvent
 import com.myschoolproject.androidchatapp.presentation.components.login.LoginScreen
 import com.myschoolproject.androidchatapp.presentation.components.main.MainScreen
 import com.myschoolproject.androidchatapp.presentation.viewmodel.ChatViewModel
@@ -58,6 +56,9 @@ fun NavigationGraph(navController: NavHostController) {
 
             val mainViewModel: MainViewModel = hiltViewModel()
             val userListState = mainViewModel.userListState.collectAsState()
+            val myChatListState = mainViewModel.myChatListState.collectAsState()
+
+            val myName = CustomSharedPreference(LocalContext.current).getUserPrefs(Constants.PREFERENCE_USERNAME)
 
             MainScreen(
                 userListState = userListState.value,
@@ -66,7 +67,9 @@ fun NavigationGraph(navController: NavHostController) {
                     navController.navigate("$routeChatScreen/$friendName") {
                         popUpTo(Routes.LOGIN_SCREEN) { inclusive = true }
                     }
-                }
+                },
+                myChatListState = myChatListState.value,
+                getMyChatList = { mainViewModel.getMyChatList(myName) },
             )
         }
 
