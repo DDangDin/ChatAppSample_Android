@@ -106,7 +106,7 @@ fun ChatScreen(
             ) {
                 if (chatState.chatList.isNotEmpty() && !chatState.loading) {
                     LazyColumn(
-                        modifier = Modifier.fillMaxWidth().padding(5.dp),
+                        modifier = Modifier.fillMaxWidth().padding(10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(
                             17.dp, alignment = Alignment.CenterVertically
