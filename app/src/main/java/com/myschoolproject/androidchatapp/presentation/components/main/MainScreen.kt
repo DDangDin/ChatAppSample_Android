@@ -1,5 +1,6 @@
 package com.myschoolproject.androidchatapp.presentation.components.main
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -52,6 +54,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,7 +81,6 @@ fun MainScreen(
     myChatListState: MyChatListState,
     onEvent: (MainUiEvent) -> Unit,
     onNavigate: (String) -> Unit,
-    getMyChatList: () -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -96,10 +98,10 @@ fun MainScreen(
     var isUserClick by remember { mutableStateOf(false) }
     var selectedUserData by remember { mutableStateOf(UserStatus()) }
     val scaffoldState = rememberScaffoldState()
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
-    )
     val coroutineScope = rememberCoroutineScope()
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = remember {BottomSheetState(BottomSheetValue.Collapsed) }
+    )
 
     val myName = CustomSharedPreference(context).getUserPrefs(Constants.PREFERENCE_USERNAME)
     val excludeList = listOf(myName, "Admin") // exclude users(Me, Admin)
@@ -115,6 +117,10 @@ fun MainScreen(
     LaunchedEffect(userListState) {
         if (!userListState.loading)
             isRefreshing = false
+    }
+
+    LaunchedEffect(key1 = bottomSheetScaffoldState) {
+        Log.d("BottomSheetState", "isCollapsed: ${bottomSheetScaffoldState.bottomSheetState.isCollapsed}")
     }
 
     BottomSheetScaffold(
@@ -135,7 +141,6 @@ fun MainScreen(
                         }
                     },
                     myChatListState = myChatListState,
-                    getMyChatList = { getMyChatList() },
                     onNavigateChat = { onNavigate(it.friendName) }
                 )
             }
@@ -197,6 +202,14 @@ fun MainScreen(
                         modifier = Modifier.fillMaxWidth(),
                         thickness = 1.5.dp,
                         color = Color(0xFFDDDDDD)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        text = stringResource(id = R.string.main_user_list_text),
+                        textAlign = TextAlign.Start,
+                        fontSize = 12.sp
                     )
                     Box(
                         modifier = Modifier
@@ -278,6 +291,7 @@ fun MainScreen(
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
@@ -286,6 +300,5 @@ fun MainScreenPreview() {
         onEvent = {},
         onNavigate = {},
         myChatListState = MyChatListState(),
-        getMyChatList = {}
     )
 }

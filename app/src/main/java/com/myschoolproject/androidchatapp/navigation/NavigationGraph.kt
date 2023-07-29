@@ -1,5 +1,9 @@
 package com.myschoolproject.androidchatapp.navigation
 
+import androidx.compose.material.BottomSheetState
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -60,6 +64,10 @@ fun NavigationGraph(navController: NavHostController) {
 
             val myName = CustomSharedPreference(LocalContext.current).getUserPrefs(Constants.PREFERENCE_USERNAME)
 
+            LaunchedEffect(key1 = Unit) {
+                mainViewModel.getMyChatList(myName)
+            }
+
             MainScreen(
                 userListState = userListState.value,
                 onEvent = mainViewModel::onEvent,
@@ -69,7 +77,6 @@ fun NavigationGraph(navController: NavHostController) {
                     }
                 },
                 myChatListState = myChatListState.value,
-                getMyChatList = { mainViewModel.getMyChatList(myName) },
             )
         }
 

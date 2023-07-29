@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -96,47 +97,48 @@ fun ChatScreen(
                         .height(1.dp)
                         .background(SpacerCustomColor)
                 )
-            }
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(top = 80.dp, start = 7.dp, end = 7.dp),
-            ) {
-                if (chatState.chatList.isNotEmpty() && !chatState.loading) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth().padding(10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(
-                            17.dp, alignment = Alignment.CenterVertically
-                        ),
-                        state = scrollState
-                    ) {
-                        items(chatList) { chat ->
-                            val isMyChat = myName == chat.username
-                            ChatScreenCardView(
-                                modifier = Modifier.fillMaxWidth(),
-                                isMyChat = isMyChat,
-                                chat = chat,
-                            )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp),
+                ) {
+                    if (chatState.chatList.isNotEmpty() && !chatState.loading) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(
+                                17.dp, alignment = Alignment.CenterVertically
+                            ),
+                            state = scrollState,
+                            contentPadding = PaddingValues(vertical = 17.dp)
+                        ) {
+                            items(chatList) { chat ->
+                                val isMyChat = myName == chat.username
+                                ChatScreenCardView(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    isMyChat = isMyChat,
+                                    chat = chat,
+                                )
+                            }
                         }
+                    } else {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .size(100.dp),
+                            strokeWidth = 3.dp,
+                            color = MyPrimaryColor
+                        )
                     }
-                } else {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(100.dp),
-                        strokeWidth = 3.dp,
-                        color = MyPrimaryColor
-                    )
                 }
             }
+
+
         }
 
         ChatScreenBottomBar(
             modifier = modifier
-                .weight(0.65f)
+//                .weight(0.65f)
                 .fillMaxWidth(),
             inputMessage = inputMessage,
             inputMessageChanged = inputMessageChanged,

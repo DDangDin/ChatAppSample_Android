@@ -3,11 +3,11 @@
 ---
 ## 1. Android ChatApp
 - Android Native
+- MVVM, Clean Architecture (Use Multi Package(Multi Module X))
 - Dependencies
 -- Compose Extends
 -- Coroutine
 -- Dagger Hilt
--- Coil
 -- Icons Extend
 -- Firebase (Database)
 

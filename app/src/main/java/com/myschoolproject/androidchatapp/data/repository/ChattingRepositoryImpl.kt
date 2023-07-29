@@ -84,6 +84,7 @@ class ChattingRepositoryImpl(
                         snapshot.children.forEach { s ->
                             val key = s.key
                             val lastChild = s.children.last().getValue(Chat::class.java)
+                            Log.d("getMyChatList_Log", "${key}, ${lastChild?.message}")
                             if (key != null && lastChild != null) {
                                 val keyList = key.split("-")
                                 if (myName in keyList) {

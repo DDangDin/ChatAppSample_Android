@@ -36,6 +36,7 @@ import com.myschoolproject.androidchatapp.core.common.Constants
 import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
 import com.myschoolproject.androidchatapp.core.utils.CustomThemeEffect.clickableWithoutRipple
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.MyChatListPreview
+import com.myschoolproject.androidchatapp.data.source.remote.firebase.lastMessagePreview
 import com.myschoolproject.androidchatapp.presentation.state.MyChatListState
 import com.myschoolproject.androidchatapp.ui.theme.MyOnBackgroundColor
 import com.myschoolproject.androidchatapp.ui.theme.MyPrimaryColor
@@ -45,16 +46,10 @@ fun MessagesBottomSheetContent(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     myChatListState: MyChatListState,
-    getMyChatList: () -> Unit,
     onNavigateChat: (MyChatListPreview) -> Unit
 ) {
 
     val context = LocalContext.current
-    val myName = CustomSharedPreference(context).getUserPrefs(Constants.PREFERENCE_USERNAME)
-
-    LaunchedEffect(key1 = Unit) {
-        getMyChatList()
-    }
 
     Column(
         modifier = modifier
@@ -71,7 +66,7 @@ fun MessagesBottomSheetContent(
                 ),
             imageVector = Icons.Rounded.KeyboardArrowDown,
             contentDescription = "drop down",
-            tint = Color.Gray
+            tint = MyPrimaryColor.copy(0.9f)
         )
         Column(
             modifier = Modifier
@@ -138,7 +133,7 @@ fun MessagesBottomSheetContent(
                                 color = MyOnBackgroundColor
                             )
                             Text(
-                                text = friend.lastMessage.message,
+                                text = friend.lastMessagePreview(0, 10),
                                 fontSize = 20.sp,
                                 color = MyOnBackgroundColor.copy(.5f)
                             )
@@ -156,7 +151,6 @@ fun MessagesBottomSheetContentPreview() {
     MessagesBottomSheetContent(
         onClick = {},
         myChatListState = MyChatListState(),
-        getMyChatList = {},
         onNavigateChat = {}
     )
 }
