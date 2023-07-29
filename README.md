@@ -3,13 +3,13 @@
 ---
 ## 1. Android ChatApp
 - Android Native
-- MVVM, Clean Architecture (Use Multi Package(Multi Module X))
+- Use Jetpack Compose, MVVM, Clean Architecture (Use Multi Package(Multi Module X))
 - Dependencies
--- Compose Extends
--- Coroutine
--- Dagger Hilt
--- Icons Extend
--- Firebase (Database)
+  - Compose Extends
+  - Coroutine
+  - Dagger Hilt
+  - Icons Extend
+  - Firebase (Database)
 
 ## 2. KMM ChatApp
 - KMM Project
