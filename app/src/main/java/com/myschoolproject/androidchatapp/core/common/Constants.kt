@@ -10,7 +10,6 @@ object Constants {
     const val FIREBASE_DATABASE_CHAT_TABLE = "chat"
     const val FIREBASE_DATABASE_INITIALIZE_MESSAGE = "00_init"
     // Firebase Realtime Database - Message
-    const val FIREBASE_DATABASE_INITIALIZE_SUCCESS = "db_init_success"
     const val FIREBASE_DATABASE_INITIALIZE_EXISTS_ERROR = "이미 있는 닉네임 입니다."
 
     // Error Messages
