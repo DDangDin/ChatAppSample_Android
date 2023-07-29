@@ -1,6 +1,5 @@
 package com.myschoolproject.androidchatapp.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myschoolproject.androidchatapp.core.common.Constants.ERROR_MESSAGE_UNEXPECTED
@@ -11,7 +10,6 @@ import com.myschoolproject.androidchatapp.presentation.components.main.MainUiEve
 import com.myschoolproject.androidchatapp.presentation.state.MyChatListState
 import com.myschoolproject.androidchatapp.presentation.state.UserListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

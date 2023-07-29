@@ -1,6 +1,5 @@
 package com.myschoolproject.androidchatapp.data.repository
 
-import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -10,11 +9,9 @@ import com.myschoolproject.androidchatapp.core.common.Constants.ERROR_MESSAGE_UN
 import com.myschoolproject.androidchatapp.core.common.Constants.FIREBASE_DATABASE_INITIALIZE_EXISTS_ERROR
 import com.myschoolproject.androidchatapp.core.common.Constants.FIREBASE_DATABASE_USER_TABLE
 import com.myschoolproject.androidchatapp.core.utils.Resource
-import com.myschoolproject.androidchatapp.data.source.remote.firebase.Chat
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
 import com.myschoolproject.androidchatapp.domain.repository.ChatRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import kotlin.coroutines.resume
@@ -96,7 +93,6 @@ class ChatRepositoryImpl(
                 chatRef.child(FIREBASE_DATABASE_USER_TABLE).addListenerForSingleValueEvent(object: ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach { it ->
-                            Log.d("snapshot_Log", it.toString())
                             it.getValue(UserStatus::class.java)?.let { user -> userList.add(user) }
                         }
                         continuation.resume(true)

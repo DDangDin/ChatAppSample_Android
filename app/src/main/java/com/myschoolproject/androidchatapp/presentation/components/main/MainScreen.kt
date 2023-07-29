@@ -8,7 +8,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,7 +22,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -63,8 +60,6 @@ import com.myschoolproject.androidchatapp.R
 import com.myschoolproject.androidchatapp.core.common.Constants
 import com.myschoolproject.androidchatapp.core.common.Utils.changeStatusBarColor
 import com.myschoolproject.androidchatapp.core.utils.CustomSharedPreference
-import com.myschoolproject.androidchatapp.core.utils.CustomThemeEffect.clickableWithoutRipple
-import com.myschoolproject.androidchatapp.data.source.remote.firebase.MyChatListPreview
 import com.myschoolproject.androidchatapp.data.source.remote.firebase.UserStatus
 import com.myschoolproject.androidchatapp.presentation.components.login.CustomButton2
 import com.myschoolproject.androidchatapp.presentation.components.messages.MessagesBottomSheetContent
