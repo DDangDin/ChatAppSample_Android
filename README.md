@@ -3,7 +3,7 @@
 ---
 ## 1. Android ChatApp
 - Android Native
-- MVVM, Clean Architecture (Use Multi Package(Multi Module X))
+- Use Jetpack Compose, MVVM, Clean Architecture (Use Multi Package(Multi Module X))
 - Dependencies
 -- Compose Extends
 -- Coroutine
