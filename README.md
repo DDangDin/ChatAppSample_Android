@@ -5,7 +5,8 @@
 - Android Native
 - Use Jetpack Compose, MVVM, Clean Architecture (Use Multi Package(Multi Module X))
 - Dependencies
-\n-- Compose Extends
+-- Compose Extends
+-- Compose Extends
 -- Coroutine
 -- Dagger Hilt
 -- Icons Extend
